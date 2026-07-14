@@ -1,0 +1,244 @@
+[
+  {
+    "step": "Read and Analyze pom.xml for Backend Dependencies and Structure",
+    "sub_steps": [
+      "Read /home/coder/project/workspace/question_generation_service/solutions/dc589774-95dd-4c1b-a858-f0a495141b89/springapp/pom.xml to identify all dependencies and ensure necessary libraries (Spring Boot, Spring Web, Spring Data JPA, MySQL, Validation, Lombok) are present.",
+      "Analyze the created project structure and application.properties to verify database (MySQL) setup.",
+      "Refer to application.properties to confirm DB connection and jpa configs.",
+      "Understand placement of the main class and intended structure for source files."
+    ],
+    "files_to_add": [],
+    "files_to_edit": [
+      "/home/coder/project/workspace/question_generation_service/solutions/dc589774-95dd-4c1b-a858-f0a495141b89/springapp/pom.xml",
+      "/home/coder/project/workspace/question_generation_service/solutions/dc589774-95dd-4c1b-a858-f0a495141b89/springapp/src/main/resources/application.properties"
+    ],
+    "description": "This step ensures that all required backend dependencies and configurations are understood and available before any backend implementation starts."
+  },
+  {
+    "step": "Implement Data Models, Repositories, and Basic DB Entity Relationships for Freelancer and Project",
+    "sub_steps": [
+      "Create Freelancer entity with required fields (id, name, email (unique), skills, hourlyRate, bio, joinedDate) and validation annotations.",
+      "Create Project entity with required fields and relationship with Freelancer (assignedFreelancer, nullable). Enum for status. Appropriate validation annotations.",
+      "Configure bidirectional (if necessary) or unidirectional relationships using jakarta.persistence annotations.",
+      "Create FreelancerRepository interface with: findBySkillsContaining (case-insensitive, matches any skill, possibly using @Query annotation), findByHourlyRateLessThanEqual.",
+      "Create ProjectRepository interface with: findByStatus, findByBudgetGreaterThanEqual, findByClientName (all using appropriate query derivations or @Query if needed).",
+      "Place these in the com.examly.springapp.model and com.examly.springapp.repository packages as per convention."
+    ],
+    "files_to_add": [
+      "/home/coder/project/workspace/question_generation_service/solutions/dc589774-95dd-4c1b-a858-f0a495141b89/springapp/src/main/java/com/examly/springapp/model/Freelancer.java",
+      "/home/coder/project/workspace/question_generation_service/solutions/dc589774-95dd-4c1b-a858-f0a495141b89/springapp/src/main/java/com/examly/springapp/model/Project.java",
+      "/home/coder/project/workspace/question_generation_service/solutions/dc589774-95dd-4c1b-a858-f0a495141b89/springapp/src/main/java/com/examly/springapp/model/ProjectStatus.java",
+      "/home/coder/project/workspace/question_generation_service/solutions/dc589774-95dd-4c1b-a858-f0a495141b89/springapp/src/main/java/com/examly/springapp/repository/FreelancerRepository.java",
+      "/home/coder/project/workspace/question_generation_service/solutions/dc589774-95dd-4c1b-a858-f0a495141b89/springapp/src/main/java/com/examly/springapp/repository/ProjectRepository.java"
+    ],
+    "files_to_edit": [],
+    "description": "Defines the core database schema, relationships, and required custom queries supporting all business logic and endpoints."
+  },
+  {
+    "step": "Implement Freelancer and Project Services for Business Logic",
+    "sub_steps": [
+      "Create FreelancerService with core methods: getAllFreelancers, getFreelancerById, createFreelancer (with validation and error aggregation), findFreelancersBySkill, etc.",
+      "Create ProjectService with corresponding methods: getAllProjects, getProjectById, createProject (with validation and error aggregation), assignFreelancerToProject, findProjectsByStatus, etc.",
+      "Add error handling for not found and validation errors, including custom Exception classes if needed (e.g., ResourceNotFoundException)."
+    ],
+    "files_to_add": [
+      "/home/coder/project/workspace/question_generation_service/solutions/dc589774-95dd-4c1b-a858-f0a495141b89/springapp/src/main/java/com/examly/springapp/service/FreelancerService.java",
+      "/home/coder/project/workspace/question_generation_service/solutions/dc589774-95dd-4c1b-a858-f0a495141b89/springapp/src/main/java/com/examly/springapp/service/ProjectService.java",
+      "/home/coder/project/workspace/question_generation_service/solutions/dc589774-95dd-4c1b-a858-f0a495141b89/springapp/src/main/java/com/examly/springapp/exception/ResourceNotFoundException.java",
+      "/home/coder/project/workspace/question_generation_service/solutions/dc589774-95dd-4c1b-a858-f0a495141b89/springapp/src/main/java/com/examly/springapp/exception/ValidationException.java"
+    ],
+    "files_to_edit": [],
+    "description": "Services encapsulate the main business logic, separating validation, error handling, and repository interaction away from controllers."
+  },
+  {
+    "step": "Implement REST Controllers for Freelancer and Project APIs with Validation and Error Handling",
+    "sub_steps": [
+      "Create FreelancerController and ProjectController under com.examly.springapp.controller.",
+      "Implement required endpoints for each as per question (GET/POST/PUT with validation and clear error message formats, validation aggregation, correct status codes, matching the response structures in example scenarios).",
+      "Implement validation using @Valid and BindingResult (collect field errors for failed validation), manual checks where necessary (e.g., for status enum, budget, date logic).",
+      "On error conditions, return JSON error format as specified.",
+      "Add CORS configuration (using @CrossOrigin or WebMvcConfigurer) to allow frontend communication.",
+      "Refer to test cases and example scenarios to ensure all behaviors are covered."
+    ],
+    "files_to_add": [
+      "/home/coder/project/workspace/question_generation_service/solutions/dc589774-95dd-4c1b-a858-f0a495141b89/springapp/src/main/java/com/examly/springapp/controller/FreelancerController.java",
+      "/home/coder/project/workspace/question_generation_service/solutions/dc589774-95dd-4c1b-a858-f0a495141b89/springapp/src/main/java/com/examly/springapp/controller/ProjectController.java",
+      "/home/coder/project/workspace/question_generation_service/solutions/dc589774-95dd-4c1b-a858-f0a495141b89/springapp/src/main/java/com/examly/springapp/config/CorsConfig.java"
+    ],
+    "files_to_edit": [],
+    "description": "Implements RESTful API endpoints, precise input validation, proper error handling and response codes as per requirements and test cases."
+  },
+  {
+    "step": "Implement Required Backend Test Cases (JUnit/Mockito) in Spring Boot",
+    "sub_steps": [
+      "For testCreateFreelancer, testGetFreelancerById, testCreateProject, testAssignFreelancerToProject, testFindProjectsByStatus: create or update *Test.java files to cover all positive and negative scenarios, using @WebMvcTest, @MockBean for services/repos, and MockMvc.",
+      "Mock repository/service beans as needed to return expected objects for test coverage.",
+      "Verify response status, body, and proper error messages/structures for all paths (success and failure cases). Match error formats exactly.",
+      "Ensure test isolation (reset mocks per test), no manual cleanup() calls.",
+      "Map each test to the requirement/component/feature it exercises."
+    ],
+    "files_to_add": [
+      "/home/coder/project/workspace/question_generation_service/solutions/dc589774-95dd-4c1b-a858-f0a495141b89/springapp/src/test/java/com/examly/springapp/controller/FreelancerControllerTest.java",
+      "/home/coder/project/workspace/question_generation_service/solutions/dc589774-95dd-4c1b-a858-f0a495141b89/springapp/src/test/java/com/examly/springapp/controller/ProjectControllerTest.java"
+    ],
+    "files_to_edit": [],
+    "description": "Implements all backend test cases for controller logic, error handling, validation, and integration, supporting robust TDD coverage as per Test Cases JSON."
+  },
+  {
+    "step": "Compile and Run Backend Tests",
+    "sub_steps": [
+      "Run mvn clean compile -q -Dspring.main.banner-mode=off in /springapp to check compilation.",
+      "Run mvn test -q -Dspring.main.banner-mode=off to execute backend tests and ensure all pass.",
+      "If required, run mvn clean install -q -Dspring.main.banner-mode=off for installation verification."
+    ],
+    "files_to_add": [],
+    "files_to_edit": [],
+    "description": "Verifies that all backend logic compiles and passes specified tests before moving to frontend implementation."
+  },
+  {
+    "step": "Read and Analyze package.json and React Boilerplate Structure for Frontend",
+    "sub_steps": [
+      "Read /home/coder/project/workspace/question_generation_service/solutions/dc589774-95dd-4c1b-a858-f0a495141b89/reactapp/package.json to list all dependencies (React, react-router-dom, testing libraries, etc.).",
+      "Review /src/ and public/ files for project structure, default styling, routing setup.",
+      "Understand where to place new components, API utilities, and styling files."
+    ],
+    "files_to_add": [],
+    "files_to_edit": [
+      "/home/coder/project/workspace/question_generation_service/solutions/dc589774-95dd-4c1b-a858-f0a495141b89/reactapp/package.json",
+      "/home/coder/project/workspace/question_generation_service/solutions/dc589774-95dd-4c1b-a858-f0a495141b89/reactapp/src/App.js"
+    ],
+    "description": "Ensures a clear understanding of frontend dependencies and structure before implementing new components or services."
+  },
+  {
+    "step": "Create React API Utility Functions for Backend Integration (api.js)",
+    "sub_steps": [
+      "In src/, create api.js with fetch calls for: getAllFreelancers, getFreelancersBySkill, createFreelancer, getAllProjects, getProjectsByStatus, createProject.",
+      "Implement functions to handle HTTP methods, parse JSON, propagate errors as needed, and use base URL http://localhost:8080.",
+      "Add appropriate error handling and standardized responses for frontend components."
+    ],
+    "files_to_add": [
+      "/home/coder/project/workspace/question_generation_service/solutions/dc589774-95dd-4c1b-a858-f0a495141b89/reactapp/src/api.js"
+    ],
+    "files_to_edit": [],
+    "description": "Centralizes backend API calls, simplifying data fetching and error handling for all frontend components."
+  },
+  {
+    "step": "Implement FreelancerList React Component and Test for List + Skill Filter + Navigation",
+    "sub_steps": [
+      "Create FreelanceList.js in components/ to fetch and display all freelancers as cards.",
+      "Implement search/filter to filter by skill (calling the appropriate API).",
+      "Render Name, Skills (as tags/csv), Hourly Rate, View Profile button, Create Freelancer button (navigates to /freelancers/new).",
+      "Add modern UI styling per color/spacing/typography requirements; use centered containers, appropriate accent/button styles.",
+      "Create matching FreelancerList.test.js in components/ to cover all specified render/search/navigate behaviors, with proper mocking of fetch/api.js.",
+      "Refer exactly to the testFreelancerListComponent in test cases JSON for requirements.",
+      "NO canvas or ambiguous selectors; use data-testid where needed."
+    ],
+    "files_to_add": [
+      "/home/coder/project/workspace/question_generation_service/solutions/dc589774-95dd-4c1b-a858-f0a495141b89/reactapp/src/components/FreelancerList.js",
+      "/home/coder/project/workspace/question_generation_service/solutions/dc589774-95dd-4c1b-a858-f0a495141b89/reactapp/src/components/FreelancerList.test.js"
+    ],
+    "files_to_edit": [],
+    "description": "Implements a visually attractive, functional list view and filter for freelancers, with a test ensuring all scenarios in the testFreelancerListComponent case."
+  },
+  {
+    "step": "Implement FreelancerForm React Component and Test for Creating Freelancers with Validation",
+    "sub_steps": [
+      "Create FreelancerForm.js in components/ to display a form with all required fields (name, email, skills, hourly rate, bio).",
+      "Implement client-side validation matching the backend requirements and error messages (required, valid email, positive rate), displaying errors next to fields.",
+      "On submit, call createFreelancer API and show success message. Clear form on success. Cancel navigates back.",
+      "Use modern, accessible UI with styling as described (container, spacing, accent, error states).",
+      "Implement FreelancerForm.test.js to test form rendering, validation errors, API call on submission, success message, and form clear. Use fetch/api.js mock.",
+      "Cover all features described in testFreelancerFormComponent test case."
+    ],
+    "files_to_add": [
+      "/home/coder/project/workspace/question_generation_service/solutions/dc589774-95dd-4c1b-a858-f0a495141b89/reactapp/src/components/FreelancerForm.js",
+      "/home/coder/project/workspace/question_generation_service/solutions/dc589774-95dd-4c1b-a858-f0a495141b89/reactapp/src/components/FreelancerForm.test.js"
+    ],
+    "files_to_edit": [],
+    "description": "Implements freelancer creation form with validation and responsive UI, with tests covering render, errors, and submission. Supports the testFreelancerFormComponent case."
+  },
+  {
+    "step": "Implement ProjectList React Component and Test for List + Status Filter + Navigation",
+    "sub_steps": [
+      "Create ProjectList.js in components/ to fetch and display projects in cards.",
+      "For each project: Show title, client name, budget, status (color-coded), View Details button.",
+      "Implement filter buttons for All, Open, In Progress, Completed; trigger correct API call.",
+      "Handle empty state messages, modern styling, clear interaction states as per guidelines.",
+      "Implement ProjectList.test.js based on testProjectListComponent: test list rendering, filter buttons, color coding, Post Project button navigation, API call assertions.",
+      "Use only provided test case requirements."
+    ],
+    "files_to_add": [
+      "/home/coder/project/workspace/question_generation_service/solutions/dc589774-95dd-4c1b-a858-f0a495141b89/reactapp/src/components/ProjectList.js",
+      "/home/coder/project/workspace/question_generation_service/solutions/dc589774-95dd-4c1b-a858-f0a495141b89/reactapp/src/components/ProjectList.test.js"
+    ],
+    "files_to_edit": [],
+    "description": "Builds a project list page with filters, visual status indicators, and correct navigation, tested via all features described in testProjectListComponent."
+  },
+  {
+    "step": "Implement ProjectForm React Component and Test for Creating Projects with Validation",
+    "sub_steps": [
+      "Create ProjectForm.js in components/ for submitting new project (title, description, budget, deadline, client name). Ensure all fields required except assignedFreelancer.",
+      "Implement validation (non-empty, positive budget, future deadline, etc.), error messages.",
+      "On submit, call createProject API, show success message, and clear the form.",
+      "Cancel navigates back to projects list.",
+      "Add appropriate UI style using accent color, spacing, error/empty states.",
+      "Implement ProjectForm.test.js: test form display, empty/past/invalid validations, API call on valid submit, success message and clear, as in testProjectFormComponent.",
+      "Align all field names and error handling with test expectations."
+    ],
+    "files_to_add": [
+      "/home/coder/project/workspace/question_generation_service/solutions/dc589774-95dd-4c1b-a858-f0a495141b89/reactapp/src/components/ProjectForm.js",
+      "/home/coder/project/workspace/question_generation_service/solutions/dc589774-95dd-4c1b-a858-f0a495141b89/reactapp/src/components/ProjectForm.test.js"
+    ],
+    "files_to_edit": [],
+    "description": "Builds form page for project creation, with robust validation and confirmation, thoroughly tested per testProjectFormComponent specification."
+  },
+  {
+    "step": "Update App.js for Routing and Integration, Add Any Required CSS Styling",
+    "sub_steps": [
+      "Update App.js to configure routes as per requirements (/freelancers, /freelancers/new, /projects, /projects/new, /).",
+      "Add navigation links/buttons in App.js or a header component.",
+      "Create/update App.css to define color variables, buttons, container, error utility classes, status classes and ensure styling requirements are enforced.",
+      "Check component imports/exports and re-test navigation and rendering logic.",
+      "Double-check all data-testid usage in components to match test selectors (no ambiguity)."
+    ],
+    "files_to_add": [
+      "/home/coder/project/workspace/question_generation_service/solutions/dc589774-95dd-4c1b-a858-f0a495141b89/reactapp/src/components/Header.js"
+    ],
+    "files_to_edit": [
+      "/home/coder/project/workspace/question_generation_service/solutions/dc589774-95dd-4c1b-a858-f0a495141b89/reactapp/src/App.js",
+      "/home/coder/project/workspace/question_generation_service/solutions/dc589774-95dd-4c1b-a858-f0a495141b89/reactapp/src/App.css"
+    ],
+    "description": "Builds the main app shell, configures declared routes, integrates navigation, and applies mandatory styling rules."
+  },
+  {
+    "step": "Implement All Required Frontend Test Cases (Jest/React Testing Library)",
+    "sub_steps": [
+      "Ensure FreelancerList.test.js covers: list rendering, data display, skill search/filter API call, View Profile and navigation, Create Freelancer button.",
+      "Ensure FreelancerForm.test.js covers: required fields, invalid email, negative rate, field errors display, successful submission and clearing, API call mocking, success message.",
+      "Ensure ProjectList.test.js covers: project cards rendering, status coloring, filter buttons and appropriate API calls, 'Post Project' navigation.",
+      "Ensure ProjectForm.test.js covers: field validates, empty/invalid input errors, success confirmation and clearing, cancel behavior, API mocking.",
+      "All tests should use proper mocking strategies, no manual cleanup(), correct usage of data-testid, and only cover provided test case descriptions."
+    ],
+    "files_to_add": [],
+    "files_to_edit": [
+      "/home/coder/project/workspace/question_generation_service/solutions/dc589774-95dd-4c1b-a858-f0a495141b89/reactapp/src/components/FreelancerList.test.js",
+      "/home/coder/project/workspace/question_generation_service/solutions/dc589774-95dd-4c1b-a858-f0a495141b89/reactapp/src/components/FreelancerForm.test.js",
+      "/home/coder/project/workspace/question_generation_service/solutions/dc589774-95dd-4c1b-a858-f0a495141b89/reactapp/src/components/ProjectList.test.js",
+      "/home/coder/project/workspace/question_generation_service/solutions/dc589774-95dd-4c1b-a858-f0a495141b89/reactapp/src/components/ProjectForm.test.js"
+    ],
+    "description": "Implements all mandated Jest/React Testing Library test scenarios matching the test case JSON, with proper mocks, selectors and error state validation."
+  },
+  {
+    "step": "Compile and Run Frontend Tests and Linting",
+    "sub_steps": [
+      "Execute npm install in /reactapp to install all packages.",
+      "Run npx eslint src/ --fix to auto-fix code style and report lint errors.",
+      "Build the app with npm run build to check for compilation errors.",
+      "Run npm run test:ci to execute all specified Jest/RTL tests for supplied test cases.",
+      "Confirm all tests pass and correct outputs are produced."
+    ],
+    "files_to_add": [],
+    "files_to_edit": [],
+    "description": "Ensures that the frontend compiles, passes linting, and all Jest/RTL test cases pass, marking solution completion."
+  }
+]
